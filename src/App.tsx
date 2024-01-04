@@ -1,5 +1,11 @@
+import MapComponent from './components/Map'
+
 function App() {
-  return <div>Hello world</div>
+  return (
+    <div>
+      <MapComponent />
+    </div>
+  )
 }
 
 export default App
