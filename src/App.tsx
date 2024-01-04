@@ -2,9 +2,9 @@ import MapComponent from './components/Map'
 
 function App() {
   return (
-    <div>
+    <main>
       <MapComponent lonLat={[0, 0]} />
-    </div>
+    </main>
   )
 }
 
