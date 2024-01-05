@@ -56,7 +56,6 @@ export default function useMap() {
 
     initialMap.on('click', (event) => {
       const coords = toLonLat(event.coordinate)
-      console.log('c', coords)
     })
   }, [selectedLatitude, selectedLongitude])
 
