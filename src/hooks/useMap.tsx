@@ -3,7 +3,7 @@ import TileLayer from 'ol/layer/Tile'
 import OSM from 'ol/source/OSM.js'
 import View from 'ol/View.js'
 import Feature from 'ol/Feature.js'
-import { fromLonLat, toLonLat } from 'ol/proj.js'
+import { fromLonLat } from 'ol/proj.js'
 import Point from 'ol/geom/Point.js'
 
 import { useEffect } from 'react'
@@ -40,7 +40,7 @@ export default function useMap() {
       source: vectorSource,
     })
 
-    const initialMap = new Map({
+    new Map({
       layers: [
         new TileLayer({
           source: new OSM(),
@@ -52,10 +52,6 @@ export default function useMap() {
         center: fromLonLat(lonLat),
         zoom: 3,
       }),
-    })
-
-    initialMap.on('click', (event) => {
-      const coords = toLonLat(event.coordinate)
     })
   }, [selectedLatitude, selectedLongitude])
 
