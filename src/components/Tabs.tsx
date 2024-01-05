@@ -53,11 +53,13 @@ type InitialDMS = {
     degrees: null | number | string
     minutes: null | number | string
     seconds: null | number | string
+    direction: null | string
   }
   longitude: {
     degrees: null | number | string
     minutes: null | number | string
     seconds: null | number | string
+    direction: null | string
   }
 }
 
@@ -71,6 +73,7 @@ function DMSToDDForm() {
     degrees: null,
     minutes: null,
     seconds: null,
+    direction: '',
   })
 
   const [initialDMSLongitude, setInitialDMSLongitude] = useState<
@@ -79,6 +82,7 @@ function DMSToDDForm() {
     degrees: null,
     minutes: null,
     seconds: null,
+    direction: '',
   })
 
   const [convertedResultDD, setConvertedResultDD] = useState<Array<number>>([])
@@ -118,6 +122,9 @@ function DMSToDDForm() {
     setSelectedLongitude(convertedResultDD[1])
     setIsDialogOpen(false)
   }
+
+  const latitudeDirection = convertedResultDD[0] >= 0 ? 'N' : 'S'
+  const longitudeDirection = convertedResultDD[1] >= 0 ? 'E' : 'W'
 
   return (
     <div className="flex flex-col gap-4 text-sm">
@@ -170,6 +177,7 @@ function DMSToDDForm() {
               }}
             />
             <span>"</span>
+            {convertedResultDD.length > 0 && <span>{latitudeDirection}</span>}
           </div>
         </div>
 
@@ -223,6 +231,8 @@ function DMSToDDForm() {
               }}
             />
             <span>"</span>
+
+            {convertedResultDD.length > 0 && <span>{longitudeDirection}</span>}
           </div>
         </div>
 
@@ -273,11 +283,13 @@ function DDToDMSForm() {
       degrees: null,
       minutes: null,
       seconds: null,
+      direction: null,
     },
     longitude: {
       degrees: null,
       minutes: null,
       seconds: null,
+      direction: null,
     },
   })
 
@@ -383,6 +395,7 @@ function DDToDMSForm() {
           <span>{resultLatitude.degrees ?? '-'} °</span>
           <span>{resultLatitude.minutes} '</span>
           <span>{resultLatitude.seconds} "</span>
+          <span>{resultLatitude.direction} "</span>
         </p>
       </div>
 
@@ -392,6 +405,7 @@ function DDToDMSForm() {
           <span>{resultLongitude.degrees ?? '-'} °</span>
           <span>{resultLongitude.minutes} '</span>
           <span>{resultLongitude.seconds} "</span>
+          <span>{resultLongitude.direction} "</span>
         </p>
       </div>
 

@@ -20,12 +20,14 @@ export function decimalToDMSLatitude(latitude: number | string) {
   const minutes = Math.floor(minutesDecimal)
   const seconds = Math.round((minutesDecimal - minutes) * 60 * 10) / 10
 
+  const direction = Number(latitude) >= 0 ? 'N' : 'S'
   const sign = Number(latitude) < 0 ? -1 : 1
 
   return {
     degrees: sign * degrees,
     minutes,
     seconds,
+    direction,
   }
 }
 export function decimalToDMSLongitude(longitude: number | string) {
@@ -35,11 +37,14 @@ export function decimalToDMSLongitude(longitude: number | string) {
   const minutes = Math.floor(minutesDecimal)
   const seconds = (minutesDecimal - minutes) * 60
 
+  const direction = Number(longitude) >= 0 ? 'E' : 'W'
+
   const sign = Number(longitude) < 0 ? -1 : 1
 
   return {
     degrees: sign * degrees,
     minutes,
     seconds,
+    direction,
   }
 }
