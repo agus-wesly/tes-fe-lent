@@ -30,7 +30,7 @@ git clone git@github.com:agus-wesly/tes-fe-lent.git tes-fe-lent
 2. Masuk ke directory & install package yang diperlukan
 
 ```
-cd test-fe-lent
+cd tes-fe-lent
 npm install
 ```
 
