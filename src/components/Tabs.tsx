@@ -1,7 +1,7 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import Input from './Input'
 import Button from './Button'
-import { FormEvent } from 'react'
+import { FormEvent, useState } from 'react'
 
 type Props = {}
 
@@ -41,7 +41,46 @@ export default function FormTabs({}: Props) {
   )
 }
 
+type InitialDMS = {
+  latitude: {
+    degrees: null | number
+    minutes: null | number
+    seconds: null | number
+  }
+  longitude: {
+    degrees: null | number
+    minutes: null | number
+    seconds: null | number
+  }
+}
+
+function validateInput(newInput: string) {
+  if (newInput === '') return null
+
+  const converted = Number(newInput)
+  if (isNaN(converted) || converted > 90) throw new Error('Invalid input')
+  return converted
+}
+
 function DMSToDDForm() {
+  const [initialDMSLatitude, setInitialDMSLatitude] = useState<
+    InitialDMS['latitude']
+  >({
+    degrees: null,
+    minutes: null,
+    seconds: null,
+  })
+
+  const [initialDMSLongitude, setInitialDMSLongitude] = useState<
+    InitialDMS['longitude']
+  >({
+    degrees: null,
+    minutes: null,
+    seconds: null,
+  })
+
+  const [convertedResultDD, setConvertedResultDD] = useState<Array<number>>([])
+
   function handleConvert(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
   }
@@ -54,15 +93,48 @@ function DMSToDDForm() {
 
       <form onSubmit={handleConvert} className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <label className="text-sm  text-neutral-600" htmlFor="latitude">
-            Latitude
-          </label>
+          <label className="text-sm  text-neutral-600">Latitude</label>
           <div className="flex">
-            <Input name="latitude" id="latitude" className="w-12" />
+            <Input
+              id="degrees-lat"
+              className="w-12"
+              value={initialDMSLatitude.degrees ?? ''}
+              onChange={(e) => {
+                const degrees = validateInput(e.target.value)
+                setInitialDMSLatitude((prev) => ({
+                  ...prev,
+                  degrees,
+                }))
+              }}
+            />
             <span className="mr-1">°</span>
-            <Input type="text" name="latitude" id="latitude" className="w-12" />
+            <Input
+              type="text"
+              id="minutes-lat"
+              className="w-12"
+              value={initialDMSLatitude.minutes ?? ''}
+              onChange={(e) => {
+                const minutes = validateInput(e.target.value)
+                setInitialDMSLatitude((prev) => ({
+                  ...prev,
+                  minutes,
+                }))
+              }}
+            />
             <span className="mr-1">'</span>
-            <Input type="text" name="latitude" id="latitude" className="w-12" />
+            <Input
+              type="text"
+              id="seconds"
+              className="w-12"
+              value={initialDMSLatitude.seconds ?? ''}
+              onChange={(e) => {
+                const seconds = validateInput(e.target.value)
+                setInitialDMSLatitude((prev) => ({
+                  ...prev,
+                  seconds,
+                }))
+              }}
+            />
             <span>"</span>
           </div>
         </div>
@@ -72,11 +144,50 @@ function DMSToDDForm() {
             Longitude
           </label>
           <div className="flex">
-            <Input type="text" name="latitude" id="latitude" className="w-12" />
+            <Input
+              type="text"
+              name="latitude"
+              id="latitude"
+              className="w-12"
+              value={initialDMSLongitude.degrees ?? ''}
+              onChange={(e) => {
+                const degrees = validateInput(e.target.value)
+                setInitialDMSLongitude((prev) => ({
+                  ...prev,
+                  degrees,
+                }))
+              }}
+            />
             <span className="mr-1">°</span>
-            <Input type="text" name="latitude" id="latitude" className="w-12" />
+            <Input
+              type="text"
+              name="latitude"
+              id="latitude"
+              className="w-12"
+              value={initialDMSLongitude.minutes ?? ''}
+              onChange={(e) => {
+                const minutes = validateInput(e.target.value)
+                setInitialDMSLongitude((prev) => ({
+                  ...prev,
+                  minutes,
+                }))
+              }}
+            />
             <span className="mr-1">'</span>
-            <Input type="text" name="latitude" id="latitude" className="w-12" />
+            <Input
+              type="text"
+              name="latitude"
+              id="latitude"
+              className="w-12"
+              value={initialDMSLongitude.seconds ?? ''}
+              onChange={(e) => {
+                const seconds = validateInput(e.target.value)
+                setInitialDMSLongitude((prev) => ({
+                  ...prev,
+                  seconds,
+                }))
+              }}
+            />
             <span>"</span>
           </div>
         </div>
