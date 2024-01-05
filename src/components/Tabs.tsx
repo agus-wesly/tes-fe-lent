@@ -48,14 +48,13 @@ function DMSToDDForm() {
 
   return (
     <div className="flex flex-col gap-4 text-sm">
-      <p className="text-neutral-900 text-lg">Convert Coordinate DMS to DD</p>
+      <p className="text-neutral-900 text-lg font-medium">
+        Convert Coordinate DMS to DD
+      </p>
 
       <form onSubmit={handleConvert} className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <label
-            className="text-sm font-medium text-neutral-900"
-            htmlFor="latitude"
-          >
+          <label className="text-sm  text-neutral-600" htmlFor="latitude">
             Latitude
           </label>
           <div className="flex">
@@ -69,10 +68,7 @@ function DMSToDDForm() {
         </div>
 
         <div className="flex items-center justify-between">
-          <label
-            className="text-sm font-medium text-neutral-900"
-            htmlFor="longitude"
-          >
+          <label className="text-sm text-neutral-600" htmlFor="longitude">
             Longitude
           </label>
           <div className="flex">
@@ -90,12 +86,12 @@ function DMSToDDForm() {
         </Button>
       </form>
 
-      <div className="flex justify-between items-center *:font-medium">
+      <div className="flex justify-between items-center">
         <p>Latitude</p>
         <p>Val</p>
       </div>
 
-      <div className="flex justify-between items-center *:font-medium">
+      <div className="flex justify-between items-center">
         <p>Longitude</p>
         <p>Val</p>
       </div>
@@ -113,14 +109,13 @@ function DDToDMSForm() {
 
   return (
     <div className="flex flex-col gap-4 text-sm">
-      <p className="text-neutral-900 text-lg">Convert Coordinate DD to DMS</p>
+      <p className="text-neutral-900 text-lg font-medium">
+        Convert Coordinate DD to DMS
+      </p>
 
       <form onSubmit={handleConvert} className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <label
-            className="text-sm font-medium text-neutral-900"
-            htmlFor="latitude"
-          >
+          <label className="text-sm text-neutral-600" htmlFor="latitude">
             Latitude
           </label>
           <div className="flex">
@@ -129,10 +124,7 @@ function DDToDMSForm() {
         </div>
 
         <div className="flex items-center justify-between">
-          <label
-            className="text-sm font-medium text-neutral-900"
-            htmlFor="longitude"
-          >
+          <label className="text-sm text-neutral-600" htmlFor="longitude">
             Longitude
           </label>
           <div className="flex">
@@ -145,12 +137,12 @@ function DDToDMSForm() {
         </Button>
       </form>
 
-      <div className="flex justify-between items-center *:font-medium">
+      <div className="flex justify-between items-center">
         <p>Latitude</p>
         <p>Val</p>
       </div>
 
-      <div className="flex justify-between items-center *:font-medium">
+      <div className="flex justify-between items-center">
         <p>Longitude</p>
         <p>Val</p>
       </div>
