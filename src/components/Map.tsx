@@ -7,11 +7,11 @@ export default function MapComponent() {
   useMap()
 
   return (
-    <div id="fullscreen" className="fullscreen">
+    <div className="w-fit overflow-y-scroll">
       <div
         key={JSON.stringify([selectedLongitude, selectedLatitude])}
         id="map"
-        className="w-[800px] aspect-video overflow-hidden relative"
+        className="w-[90vw] aspect-video overflow-hidden relative"
       >
         <button
           onClick={() => setIsDialogOpen(true)}
