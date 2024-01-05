@@ -50,7 +50,7 @@ export default function useMap() {
       target: 'map',
       view: new View({
         center: fromLonLat(lonLat),
-        zoom: 3,
+        zoom: 5,
       }),
     })
   }, [selectedLatitude, selectedLongitude])
