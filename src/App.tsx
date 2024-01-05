@@ -6,7 +6,7 @@ function App() {
   return (
     <CartContextProvider>
       <main className="w-screen my-10 gap-5 flex flex-col justify-center items-center">
-        <h1 className="text-xl font-semibold">React Vite + Opengraph</h1>
+        <h1 className="text-xl font-semibold">React Vite + Openlayer</h1>
         <MapComponent />
         <DialogForm />
       </main>
