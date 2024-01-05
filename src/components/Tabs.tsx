@@ -2,6 +2,8 @@ import * as Tabs from '@radix-ui/react-tabs'
 import Input from './Input'
 import Button from './Button'
 import { FormEvent, useState } from 'react'
+import { decimalToDMS, dmsToDecimal } from '../utils/converter'
+import { validateInput } from '../utils/validator'
 
 type Props = {}
 
@@ -43,23 +45,15 @@ export default function FormTabs({}: Props) {
 
 type InitialDMS = {
   latitude: {
-    degrees: null | number
-    minutes: null | number
-    seconds: null | number
+    degrees: null | number | string
+    minutes: null | number | string
+    seconds: null | number | string
   }
   longitude: {
-    degrees: null | number
-    minutes: null | number
-    seconds: null | number
+    degrees: null | number | string
+    minutes: null | number | string
+    seconds: null | number | string
   }
-}
-
-function validateInput(newInput: string) {
-  if (newInput === '') return null
-
-  const converted = Number(newInput)
-  if (isNaN(converted) || converted > 90) throw new Error('Invalid input')
-  return converted
 }
 
 function DMSToDDForm() {
@@ -81,8 +75,37 @@ function DMSToDDForm() {
 
   const [convertedResultDD, setConvertedResultDD] = useState<Array<number>>([])
 
+  const canConvert =
+    Object.keys(initialDMSLatitude).every(
+      (val) => initialDMSLatitude[val as keyof InitialDMS['latitude']] !== null
+    ) &&
+    Object.keys(initialDMSLongitude).every(
+      (val) =>
+        initialDMSLongitude[val as keyof InitialDMS['longitude']] !== null
+    )
+
   function handleConvert(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
+
+    if (!canConvert) return
+
+    const resultLatitude = dmsToDecimal({
+      degrees: initialDMSLatitude.degrees!,
+      minutes: initialDMSLatitude.minutes!,
+      seconds: initialDMSLatitude.seconds!,
+    })
+
+    const resultLongitude = dmsToDecimal({
+      degrees: initialDMSLongitude.degrees!,
+      minutes: initialDMSLongitude.minutes!,
+      seconds: initialDMSLongitude.seconds!,
+    })
+
+    setConvertedResultDD([resultLatitude, resultLongitude])
+  }
+
+  function handleAddToMap() {
+    if (!canConvert) return
   }
 
   return (
@@ -97,10 +120,10 @@ function DMSToDDForm() {
           <div className="flex">
             <Input
               id="degrees-lat"
-              className="w-12"
+              className="w-24"
               value={initialDMSLatitude.degrees ?? ''}
               onChange={(e) => {
-                const degrees = validateInput(e.target.value)
+                const degrees = validateInput(e.target.value, -90, 90)
                 setInitialDMSLatitude((prev) => ({
                   ...prev,
                   degrees,
@@ -111,10 +134,10 @@ function DMSToDDForm() {
             <Input
               type="text"
               id="minutes-lat"
-              className="w-12"
+              className="w-24"
               value={initialDMSLatitude.minutes ?? ''}
               onChange={(e) => {
-                const minutes = validateInput(e.target.value)
+                const minutes = validateInput(e.target.value, 0, 60)
                 setInitialDMSLatitude((prev) => ({
                   ...prev,
                   minutes,
@@ -125,10 +148,10 @@ function DMSToDDForm() {
             <Input
               type="text"
               id="seconds"
-              className="w-12"
+              className="w-24"
               value={initialDMSLatitude.seconds ?? ''}
               onChange={(e) => {
-                const seconds = validateInput(e.target.value)
+                const seconds = validateInput(e.target.value, 0, 60)
                 setInitialDMSLatitude((prev) => ({
                   ...prev,
                   seconds,
@@ -148,10 +171,10 @@ function DMSToDDForm() {
               type="text"
               name="latitude"
               id="latitude"
-              className="w-12"
+              className="w-24"
               value={initialDMSLongitude.degrees ?? ''}
               onChange={(e) => {
-                const degrees = validateInput(e.target.value)
+                const degrees = validateInput(e.target.value, -90, 90)
                 setInitialDMSLongitude((prev) => ({
                   ...prev,
                   degrees,
@@ -163,10 +186,10 @@ function DMSToDDForm() {
               type="text"
               name="latitude"
               id="latitude"
-              className="w-12"
+              className="w-24"
               value={initialDMSLongitude.minutes ?? ''}
               onChange={(e) => {
-                const minutes = validateInput(e.target.value)
+                const minutes = validateInput(e.target.value, 0, 60)
                 setInitialDMSLongitude((prev) => ({
                   ...prev,
                   minutes,
@@ -178,10 +201,10 @@ function DMSToDDForm() {
               type="text"
               name="latitude"
               id="latitude"
-              className="w-12"
+              className="w-24"
               value={initialDMSLongitude.seconds ?? ''}
               onChange={(e) => {
-                const seconds = validateInput(e.target.value)
+                const seconds = validateInput(e.target.value, 0, 60)
                 setInitialDMSLongitude((prev) => ({
                   ...prev,
                   seconds,
@@ -192,31 +215,89 @@ function DMSToDDForm() {
           </div>
         </div>
 
-        <Button className="self-end text-xs p-3" type="submit">
+        <Button
+          disabled={!canConvert}
+          className="self-end text-xs p-3"
+          type="submit"
+        >
           Convert
         </Button>
       </form>
 
       <div className="flex justify-between items-center">
         <p>Latitude</p>
-        <p>Val</p>
+        <p className="font-semibold">{convertedResultDD[0] ?? '-'} deg</p>
       </div>
 
       <div className="flex justify-between items-center">
         <p>Longitude</p>
-        <p>Val</p>
+        <p className="font-semibold">{convertedResultDD[1] ?? '-'} deg</p>
       </div>
 
-      <Button className="self-center text-xs p-3" type="submit">
+      <Button
+        onClick={handleAddToMap}
+        disabled={!convertedResultDD.length}
+        className="self-center text-xs p-3"
+        type="submit"
+      >
         Add to maps
       </Button>
     </div>
   )
 }
 function DDToDMSForm() {
+  const [initialDD, setInitialDD] = useState<{
+    latitude: number | null | string
+    longitude: number | null | string
+  }>({
+    latitude: null,
+    longitude: null,
+  })
+
+  const [resultDMS, setResultDMS] = useState<InitialDMS>({
+    latitude: {
+      degrees: null,
+      minutes: null,
+      seconds: null,
+    },
+    longitude: {
+      degrees: null,
+      minutes: null,
+      seconds: null,
+    },
+  })
+
+  const canConvert = Object.keys(initialDD).every(
+    (val) => initialDD[val as keyof typeof initialDD] !== null
+  )
+
   function handleConvert(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
+
+    if (!canConvert) return
+
+    const resultLatitude = decimalToDMS(initialDD.latitude!)
+    const resultLongitude = decimalToDMS(initialDD.longitude!)
+
+    setResultDMS({
+      latitude: {
+        ...resultLatitude,
+      },
+      longitude: {
+        ...resultLongitude,
+      },
+    })
   }
+
+  const canAddToMap =
+    resultDMS.latitude.degrees !== null && resultDMS.longitude.degrees !== null
+
+  function handleAddToMap() {
+    if (!canAddToMap) return
+  }
+
+  const resultLatitude = resultDMS.latitude
+  const resultLongitude = resultDMS.longitude
 
   return (
     <div className="flex flex-col gap-4 text-sm">
@@ -230,7 +311,15 @@ function DDToDMSForm() {
             Latitude
           </label>
           <div className="flex">
-            <Input name="latitude" id="latitude" className="w-20" />
+            <Input
+              id="latitude"
+              className="w-36"
+              value={initialDD.latitude ?? ''}
+              onChange={(e) => {
+                const latitude = validateInput(e.target.value, -90, 90)
+                setInitialDD((prev) => ({ ...prev, latitude }))
+              }}
+            />
           </div>
         </div>
 
@@ -239,26 +328,52 @@ function DDToDMSForm() {
             Longitude
           </label>
           <div className="flex">
-            <Input type="text" name="latitude" id="latitude" className="w-20" />
+            <Input
+              type="text"
+              id="longitude"
+              className="w-36"
+              value={initialDD.longitude ?? ''}
+              onChange={(e) => {
+                const longitude = validateInput(e.target.value, -90, 90)
+                setInitialDD((prev) => ({ ...prev, longitude }))
+              }}
+            />
           </div>
         </div>
 
-        <Button className="self-end text-xs p-3" type="submit">
+        <Button
+          disabled={!canConvert}
+          className="self-end text-xs p-3"
+          type="submit"
+        >
           Convert
         </Button>
       </form>
 
       <div className="flex justify-between items-center">
         <p>Latitude</p>
-        <p>Val</p>
+        <p>
+          <span>{resultLatitude.degrees ?? '-'} °</span>
+          <span>{resultLatitude.minutes} '</span>
+          <span>{resultLatitude.seconds} "</span>
+        </p>
       </div>
 
       <div className="flex justify-between items-center">
         <p>Longitude</p>
-        <p>Val</p>
+        <p>
+          <span>{resultLongitude.degrees ?? '-'} °</span>
+          <span>{resultLongitude.minutes} '</span>
+          <span>{resultLongitude.seconds} "</span>
+        </p>
       </div>
 
-      <Button className="self-center text-xs p-3" type="submit">
+      <Button
+        onClick={handleAddToMap}
+        disabled={!canAddToMap}
+        className="self-center text-xs p-3"
+        type="submit"
+      >
         Add to maps
       </Button>
     </div>
