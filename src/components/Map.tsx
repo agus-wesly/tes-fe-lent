@@ -11,13 +11,15 @@ import Style from 'ol/style/Style'
 import Icon from 'ol/style/Icon'
 import VectorSource from 'ol/source/Vector'
 import VectorLayer from 'ol/layer/Vector'
-import DialogForm from './Dialog'
+import { useMapContext } from '../context/MapContext'
 
 type Props = {
   lonLat: Array<number>
 }
 
 export default function MapComponent({ lonLat }: Props) {
+  const { setIsDialogOpen } = useMapContext()
+
   useEffect(() => {
     const rome = new Feature({
       geometry: new Point(fromLonLat(lonLat)),
@@ -63,7 +65,15 @@ export default function MapComponent({ lonLat }: Props) {
   return (
     <div id="fullscreen" className="fullscreen">
       <div id="map" className="w-[800px] aspect-video overflow-hidden relative">
-        <DialogForm />
+        <button
+          onClick={() => setIsDialogOpen(true)}
+          className="absolute z-[2] top-2 right-2 bg-white p-1 rounded-sm"
+        >
+          <img
+            src="/assets/icons/setting.svg"
+            className="w-5 h-5 object-contain"
+          />
+        </button>
       </div>
     </div>
   )

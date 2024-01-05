@@ -1,9 +1,14 @@
+import DialogForm from './components/Dialog'
 import MapComponent from './components/Map'
+import { CartContextProvider } from './context/MapContext'
 
 function App() {
   return (
     <main>
-      <MapComponent lonLat={[0, 0]} />
+      <CartContextProvider>
+        <MapComponent lonLat={[0, 0]} />
+        <DialogForm />
+      </CartContextProvider>
     </main>
   )
 }
