@@ -9,7 +9,7 @@ export default function MapComponent() {
   return (
     <div id="fullscreen" className="fullscreen">
       <div
-        key={JSON.stringify([selectedLatitude, selectedLongitude])}
+        key={JSON.stringify([selectedLongitude, selectedLatitude])}
         id="map"
         className="w-[800px] aspect-video overflow-hidden relative"
       >

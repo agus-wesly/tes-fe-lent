@@ -2,7 +2,11 @@ import * as Tabs from '@radix-ui/react-tabs'
 import Input from './Input'
 import Button from './Button'
 import { FormEvent, useContext, useState } from 'react'
-import { decimalToDMS, dmsToDecimal } from '../utils/converter'
+import {
+  decimalToDMSLatitude,
+  decimalToDMSLongitude,
+  dmsToDecimal,
+} from '../utils/converter'
 import { validateInput } from '../utils/validator'
 import { useMapContext } from '../context/MapContext'
 
@@ -181,7 +185,7 @@ function DMSToDDForm() {
               className="w-24"
               value={initialDMSLongitude.degrees ?? ''}
               onChange={(e) => {
-                const degrees = validateInput(e.target.value, -90, 90)
+                const degrees = validateInput(e.target.value, -180, 180)
                 setInitialDMSLongitude((prev) => ({
                   ...prev,
                   degrees,
@@ -286,8 +290,8 @@ function DDToDMSForm() {
 
     if (!canConvert) return
 
-    const resultLatitude = decimalToDMS(initialDD.latitude!)
-    const resultLongitude = decimalToDMS(initialDD.longitude!)
+    const resultLatitude = decimalToDMSLatitude(initialDD.latitude!)
+    const resultLongitude = decimalToDMSLongitude(initialDD.longitude!)
 
     setResultDMS({
       latitude: {
@@ -357,7 +361,7 @@ function DDToDMSForm() {
               className="w-36"
               value={initialDD.longitude ?? ''}
               onChange={(e) => {
-                const longitude = validateInput(e.target.value, -90, 90)
+                const longitude = validateInput(e.target.value, -180, 180)
                 setInitialDD((prev) => ({ ...prev, longitude }))
               }}
             />

@@ -3,10 +3,10 @@ import TileLayer from 'ol/layer/Tile'
 import OSM from 'ol/source/OSM.js'
 import View from 'ol/View.js'
 import Feature from 'ol/Feature.js'
-import { fromLonLat } from 'ol/proj.js'
+import { fromLonLat, toLonLat } from 'ol/proj.js'
 import Point from 'ol/geom/Point.js'
 
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import Style from 'ol/style/Style'
 import Icon from 'ol/style/Icon'
 import VectorSource from 'ol/source/Vector'
@@ -15,7 +15,7 @@ import { useMapContext } from '../context/MapContext'
 
 export default function useMap() {
   const { selectedLatitude, selectedLongitude } = useMapContext()
-  const lonLat = [selectedLatitude, selectedLongitude]
+  const lonLat = [selectedLongitude, selectedLatitude]
 
   useEffect(() => {
     const rome = new Feature({
@@ -50,11 +50,14 @@ export default function useMap() {
       target: 'map',
       view: new View({
         center: fromLonLat(lonLat),
-        zoom: 5,
+        zoom: 3,
       }),
     })
 
-    initialMap.on('click', (event) => {})
+    initialMap.on('click', (event) => {
+      const coords = toLonLat(event.coordinate)
+      console.log('c', coords)
+    })
   }, [selectedLatitude, selectedLongitude])
 
   return null
