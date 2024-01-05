@@ -1,9 +1,10 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import Input from './Input'
 import Button from './Button'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useContext, useState } from 'react'
 import { decimalToDMS, dmsToDecimal } from '../utils/converter'
 import { validateInput } from '../utils/validator'
+import { useMapContext } from '../context/MapContext'
 
 type Props = {}
 
@@ -57,6 +58,9 @@ type InitialDMS = {
 }
 
 function DMSToDDForm() {
+  const { setIsDialogOpen, setSelectedLongitude, setSelectedLatitude } =
+    useMapContext()
+
   const [initialDMSLatitude, setInitialDMSLatitude] = useState<
     InitialDMS['latitude']
   >({
@@ -106,6 +110,9 @@ function DMSToDDForm() {
 
   function handleAddToMap() {
     if (!canConvert) return
+    setSelectedLatitude(convertedResultDD[0])
+    setSelectedLongitude(convertedResultDD[1])
+    setIsDialogOpen(false)
   }
 
   return (
@@ -246,6 +253,9 @@ function DMSToDDForm() {
   )
 }
 function DDToDMSForm() {
+  const { setSelectedLatitude, setSelectedLongitude, setIsDialogOpen } =
+    useMapContext()
+
   const [initialDD, setInitialDD] = useState<{
     latitude: number | null | string
     longitude: number | null | string
@@ -294,6 +304,19 @@ function DDToDMSForm() {
 
   function handleAddToMap() {
     if (!canAddToMap) return
+    const resultLatitude = dmsToDecimal({
+      degrees: resultDMS.latitude.degrees!,
+      minutes: resultDMS.latitude.minutes!,
+      seconds: resultDMS.latitude.seconds!,
+    })
+    const resultLongitude = dmsToDecimal({
+      degrees: resultDMS.longitude.degrees!,
+      minutes: resultDMS.longitude.minutes!,
+      seconds: resultDMS.longitude.seconds!,
+    })
+    setSelectedLatitude(resultLatitude)
+    setSelectedLongitude(resultLongitude)
+    setIsDialogOpen(false)
   }
 
   const resultLatitude = resultDMS.latitude

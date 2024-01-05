@@ -6,7 +6,7 @@ import Feature from 'ol/Feature.js'
 import { fromLonLat } from 'ol/proj.js'
 import Point from 'ol/geom/Point.js'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import Style from 'ol/style/Style'
 import Icon from 'ol/style/Icon'
 import VectorSource from 'ol/source/Vector'
@@ -54,10 +54,8 @@ export default function useMap() {
       }),
     })
 
-    initialMap.on('click', (event) => {
-      console.log('e', event.coordinate)
-    })
-  }, [])
+    initialMap.on('click', (event) => {})
+  }, [selectedLatitude, selectedLongitude])
 
   return null
 }

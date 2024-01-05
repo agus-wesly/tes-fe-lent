@@ -2,12 +2,17 @@ import { useMapContext } from '../context/MapContext'
 import useMap from '../hooks/useMap'
 
 export default function MapComponent() {
-  const { setIsDialogOpen } = useMapContext()
+  const { setIsDialogOpen, selectedLatitude, selectedLongitude } =
+    useMapContext()
   useMap()
 
   return (
     <div id="fullscreen" className="fullscreen">
-      <div id="map" className="w-[800px] aspect-video overflow-hidden relative">
+      <div
+        key={JSON.stringify([selectedLatitude, selectedLongitude])}
+        id="map"
+        className="w-[800px] aspect-video overflow-hidden relative"
+      >
         <button
           onClick={() => setIsDialogOpen(true)}
           className="absolute z-[2] top-2 right-2 bg-white p-1 rounded-sm"
