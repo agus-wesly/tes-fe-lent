@@ -1,7 +1,7 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import Input from './Input'
 import Button from './Button'
-import { FormEvent, useContext, useState } from 'react'
+import { FormEvent, useState } from 'react'
 import {
   decimalToDMSLatitude,
   decimalToDMSLongitude,
