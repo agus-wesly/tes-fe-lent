@@ -6,7 +6,7 @@ function App() {
   return (
     <main>
       <CartContextProvider>
-        <MapComponent lonLat={[0, 0]} />
+        <MapComponent />
         <DialogForm />
       </CartContextProvider>
     </main>
